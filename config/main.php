@@ -24,6 +24,10 @@ $config = [
             'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => require __DIR__ . '/routes.php'
+        ],
+        'user' => [
+            'identityClass' => 'app\models\User',
+            'enableAutoLogin' => true
         ]
     ]
 ];
