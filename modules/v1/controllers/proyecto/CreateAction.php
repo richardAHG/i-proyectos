@@ -8,6 +8,7 @@ use app\modules\v1\models\clases\Archivos;
 use app\modules\v1\models\clases\ProyectoInformacion;
 use app\modules\v1\models\ProyectoArchivosModel;
 use app\modules\v1\models\ProyectoInformacionModel;
+use app\modules\v1\models\query\ProyectoQuery;
 use app\modules\v1\utils\ProyectoUtil;
 use app\rest\Action;
 use Exception;
@@ -51,7 +52,8 @@ class CreateAction extends Action
         $usuario_id = Yii::$app->getRequest()->get('usuario_id', false);
 
         //validar nombre duplicados por usuario
-
+        ProyectoQuery::validateDuplicate($usuario_id, $requestParams['nombre']);
+        
         $transaction = Yii::$app->db->beginTransaction();
         try {
 
@@ -61,7 +63,7 @@ class CreateAction extends Action
             if (!$model->save()) {
                 throw new ServerErrorHttpException('Error al guardar el proyecto');
             }
-            
+
             ProyectoInformacion::insertar($requestParams, $model->id);
             // print_r($model); die();
             ProyectoUtil::loadFile($model->id, $file);
@@ -69,7 +71,7 @@ class CreateAction extends Action
             $transaction->commit();
         } catch (Exception $ex) {
             $transaction->rollBack();
-             echo $ex->getMessage();
+            echo $ex->getMessage();
         }
 
         return $model;
