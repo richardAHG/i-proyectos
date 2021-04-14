@@ -14,6 +14,11 @@ class ProyectoController extends ActiveController
 
         $actions['create']['class'] = 'app\modules\v1\controllers\proyecto\CreateAction';
 
+        $actions['updateproyecto'] = [
+            'class' => 'app\modules\v1\controllers\proyecto\UpdateAction',
+            'modelClass' => $this->modelClass
+        ];
+        
         return $actions;
     }
 }
