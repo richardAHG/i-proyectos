@@ -2,8 +2,10 @@
 
 namespace app\rest;
 
+use app\modules\v1\constants\Params;
 use Yii;
 use yii\base\Model;
+use yii\web\BadRequestHttpException;
 use yii\web\ServerErrorHttpException;
 
 /**
@@ -15,7 +17,7 @@ class DeleteAction extends Action
      * @var string el escenario que se asignará al modelo antes de que sea validado y actualizado.
      */
     public $scenario = Model::SCENARIO_DEFAULT;
-    
+
     /**
      * Eliminar un registro
      * 
@@ -30,17 +32,11 @@ class DeleteAction extends Action
             call_user_func($this->checkAccess, $this->id, $model);
         }
 
-        $model->scenario = $this->scenario;
+        $model->estado = false;
+        $model->eliminado_por = Params::getAudit();
 
-        $requestParams = Yii::$app->getRequest()->getBodyParams();
-        if (empty($requestParams)) {
-            $requestParams = Yii::$app->getRequest()->getQueryParams();
-        }
-
-        $requestParams["estado"] = 0;
-        $model->load($requestParams, '');
-        if ($model->save() === false && !$model->hasErrors()) {
-            throw new ServerErrorHttpException('Failed to update the object for unknown reason.');
+        if (!$model->save()) {
+            throw new BadRequestHttpException("Error al eliminar el proyecto");
         }
 
         return $model;

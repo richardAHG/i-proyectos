@@ -17,4 +17,16 @@ class ProyectoArchivo
             throw new ServerErrorHttpException('Error al insertar en proyecto archivo.');
         }
     }
+
+    public static function eliminar($proyectoId)
+    {
+        $model = ProyectoArchivosModel::find()
+            ->where(['estado' => true, 'proyecto_id' => $proyectoId])
+            ->one();
+        $model->estado = false;
+        if (!$model->save()) {
+            throw new ServerErrorHttpException('Error al elimnar en proyecto archivo.');
+        }
+        return $model->archivo_id;
+    }
 }

@@ -25,4 +25,19 @@ class Archivos
 
         return $model->id;
     }
+
+    public static function elimnar($archivoId)
+    {
+        $model = ArchivosModel::find()
+            ->where(['estado' => true, 'id' => $archivoId])
+            ->one();
+
+        $model->estado = false;
+        
+        if (!$model->save()) {
+            throw new ServerErrorHttpException('Error al eliminar en archivo');
+        }
+
+        return $model->id;
+    }
 }

@@ -10,8 +10,11 @@ namespace app\modules\v1\controllers\proyecto;
 
 use app\modules\v1\constants\Params;
 use app\modules\v1\models\ArchivosModel;
+use app\modules\v1\models\clases\Archivos;
+use app\modules\v1\models\clases\ProyectoArchivo;
 use app\modules\v1\models\clases\ProyectoInformacion;
 use app\modules\v1\models\ProyectoArchivosModel;
+use app\modules\v1\models\query\ProyectoQuery;
 use app\modules\v1\utils\event\ProyectoEvent;
 use app\modules\v1\utils\ProyectoUtil;
 use app\rest\Action;
@@ -63,7 +66,9 @@ class UpdateAction extends Action
         if (!$usuarioId) {
             throw new BadRequestHttpException("Bad Request");
         }
-        
+        //validar nombre duplicados por usuario
+        ProyectoQuery::validateDuplicateUpdate($usuarioId, $requestParams['nombre'], $id);
+
         $transaction = Yii::$app->db->beginTransaction();
         try {
             $requestParams['actualizado_por'] = Params::getAudit();
@@ -77,37 +82,15 @@ class UpdateAction extends Action
             ProyectoInformacion::actualizar($requestParams, $model->id);
 
             if ($file) {
-                //Dejar inactivo los registros anteriores
-                $proyectoArchivoModel = ProyectoArchivosModel::find()
-                    ->where([
-                        'proyecto_id' => $id,
-                        'estado' => true
-                    ])
-                    ->one();
-                //Dar de baja a archivos
-                $archivosModel = ArchivosModel::find()
-                    ->where([
-                        'id' => $proyectoArchivoModel->archivo_id,
-                        'estado' => true
-                    ])
-                    ->one();
-                
-                $archivosModel->estado = false;
+                // Eliminar asignación del proyecto_archivo anteriores
+                $archivoId = ProyectoArchivo::eliminar($model->id);
 
-                if (!$archivosModel->save()) {
-                    throw new NotFoundHttpException("Error eliminando archivo");
-                }
-
-                $proyectoArchivoModel->estado = false;
-
-                if (!$proyectoArchivoModel->save()) {
-                    throw new NotFoundHttpException("Error eliminando proyecto archivo");
-                }
+                // Eliminar archivo asignado al proyecto
+                Archivos::elimnar($archivoId);
 
                 ProyectoUtil::loadFile($id, $file);
             }
 
-            
             $transaction->commit();
         } catch (Exception $ex) {
             $transaction->rollBack();

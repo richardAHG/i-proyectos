@@ -13,6 +13,7 @@ class ProyectoController extends ActiveController
         $actions = parent::actions();
 
         $actions['create']['class'] = 'app\modules\v1\controllers\proyecto\CreateAction';
+        $actions['delete']['class'] = 'app\modules\v1\controllers\proyecto\DeleteAction';
 
         $actions['updateproyecto'] = [
             'class' => 'app\modules\v1\controllers\proyecto\UpdateAction',

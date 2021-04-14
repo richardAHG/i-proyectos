@@ -34,7 +34,24 @@ class ProyectoInformacion
         $model->descripcion = $params['descripcion'];
         $model->proyecto_id = $proyecto_id;
         if (!$model->save()) {
-            throw new ServerErrorHttpException('Error al guardar la informacion del proyecto');
+            throw new ServerErrorHttpException('Error al actualizar la informacion del proyecto');
+        }
+
+        return $model->id;
+    }
+    public static function eliminar($proyecto_id)
+    {
+        $model = ProyectoInformacionModel::find()
+            ->where([
+                'estado' => true,
+                'proyecto_id' => $proyecto_id
+            ])
+            ->one();
+
+        $model->estado = false;
+        
+        if (!$model->save()) {
+            throw new ServerErrorHttpException('Error al eliminar la informacion del proyecto');
         }
 
         return $model->id;

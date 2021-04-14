@@ -20,4 +20,19 @@ class ProyectoQuery
             throw new BadRequestHttpException("Name already exists, process canceled");
         }
     }
+
+    public static function validateDuplicateUpdate($usuarioId, $nombre, $proyectoId)
+    {
+        $exist = ProyectosModel::find()
+            ->where(['usuario_id' => $usuarioId])
+            ->andWhere(['NOT', ['id' => $proyectoId]])
+            ->andWhere([
+                'estado' => true,
+                'upper(nombre)' => mb_strtoupper($nombre)
+            ])
+            ->one();
+        if (isset($exist)) {
+            throw new BadRequestHttpException("Name already exists, process canceled");
+        }
+    }
 }
