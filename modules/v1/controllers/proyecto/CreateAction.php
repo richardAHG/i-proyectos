@@ -3,11 +3,7 @@
 namespace app\modules\v1\controllers\proyecto;
 
 use app\modules\v1\constants\Params;
-use app\modules\v1\models\ArchivosModel;
-use app\modules\v1\models\clases\Archivos;
 use app\modules\v1\models\clases\ProyectoInformacion;
-use app\modules\v1\models\ProyectoArchivosModel;
-use app\modules\v1\models\ProyectoInformacionModel;
 use app\modules\v1\models\query\ProyectoQuery;
 use app\modules\v1\utils\ProyectoUtil;
 use app\rest\Action;

@@ -9,20 +9,16 @@
 namespace app\modules\v1\controllers\proyecto;
 
 use app\modules\v1\constants\Params;
-use app\modules\v1\models\ArchivosModel;
 use app\modules\v1\models\clases\Archivos;
 use app\modules\v1\models\clases\ProyectoArchivo;
 use app\modules\v1\models\clases\ProyectoInformacion;
-use app\modules\v1\models\ProyectoArchivosModel;
 use app\modules\v1\models\query\ProyectoQuery;
-use app\modules\v1\utils\event\ProyectoEvent;
 use app\modules\v1\utils\ProyectoUtil;
 use app\rest\Action;
 use Exception;
 use Yii;
 use yii\base\Model;
 use yii\web\BadRequestHttpException;
-use yii\web\NotFoundHttpException;
 use yii\web\ServerErrorHttpException;
 use yii\web\UploadedFile;
 

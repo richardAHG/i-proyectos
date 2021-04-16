@@ -2,7 +2,9 @@
 
 namespace app\rest;
 
+use Yii;
 use yii\rest\Action as RestAction;
+use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -17,13 +19,19 @@ class Action extends RestAction
     {
         parent::init();
         $this->findModel = function ($id, $action) {
+            $usuarioId = Yii::$app->getRequest()->get($this->customToken, false);
+
+            if (!$usuarioId) {
+                throw new BadRequestHttpException("Bad Request");
+            }
 
             $modelClass = $action->modelClass;
             // $model = $modelClass::findIfBelongsToProject($id, $proyectoId);
             $model = $modelClass::find()
                 ->where(["id" => $id])
                 ->andWhere([
-                    "estado" => 1,
+                    "estado" => true,
+                    'usuario_id' => $usuarioId
                 ])
                 ->one();
             if (isset($model)) {

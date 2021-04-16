@@ -20,6 +20,11 @@ class ProyectoController extends ActiveController
             'modelClass' => $this->modelClass
         ];
         
+        $actions['etapaCreate'] = [
+            'class' => 'app\modules\v1\controllers\etapa\CreateAction',
+            'modelClass' => 'app\modules\v1\models\ProyectoEtapasModel'
+        ];
+
         return $actions;
     }
 }
