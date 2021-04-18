@@ -52,6 +52,14 @@ class ProyectoController extends ActiveController
             'modelClass' => $areaModel
         ];
 
+        //Colaborador
+        $colaboradorModel = 'app\modules\v1\models\ProyectoColaboradoresModel';
+        $actions['colaboradorView'] = [
+            'class' => 'app\modules\v1\controllers\colaborador\CreateAction',
+            'modelClass' => $colaboradorModel
+        ];
+
+
         return $actions;
     }
 }

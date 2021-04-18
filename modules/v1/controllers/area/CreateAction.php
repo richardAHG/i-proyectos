@@ -10,7 +10,6 @@ namespace app\modules\v1\controllers\area;
 
 use app\modules\v1\constants\Params;
 use app\modules\v1\models\query\AreaQuery;
-use app\modules\v1\models\query\EtapaQuery;
 use enmodel\iwasi\library\rest\Action;
 use Yii;
 use yii\base\Model;

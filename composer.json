@@ -2,7 +2,8 @@
     "name": "user/iwasi-proyectos",
     "require": {
         "yiisoft/yii2": "2.0.41.1",
-        "enmodel/iwasi-library-rest": "^v1.0.0"
+        "enmodel/iwasi-library-rest": "^v1.0.0",
+        "phpmailer/phpmailer": "^6.2"
     },
     "require-dev": {
         "yiisoft/yii2-gii": "^2.2"

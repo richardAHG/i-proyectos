@@ -18,6 +18,7 @@ return [
             'DELETE {proyecto_id}/area/{id}' => 'areaDelete',
             'GET {proyecto_id}/area' => 'areaIndex',
             'GET {proyecto_id}/area/{id}' => 'areaView',
+            'POST {proyecto_id}/colaborador' => 'colaboradorView',
         ],
         'prefix' => '/v1/<usuario_id:\\d>'
     ],
