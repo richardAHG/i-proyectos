@@ -20,11 +20,6 @@ class ProyectoController extends ActiveController
             'modelClass' => $this->modelClass
         ];
 
-        $actions['etapaCreate'] = [
-            'class' => 'app\modules\v1\controllers\etapa\CreateAction',
-            'modelClass' => 'app\modules\v1\models\ProyectoEtapasModel'
-        ];
-
         // Area
         $areaModel = 'app\modules\v1\models\ProyectoAreasModel';
         $actions['areaCreate'] = [
@@ -49,6 +44,33 @@ class ProyectoController extends ActiveController
 
         $actions['areaView'] = [
             'class' => 'app\modules\v1\controllers\area\ViewAction',
+            'modelClass' => $areaModel
+        ];
+
+        // etapa
+        $areaModel = 'app\modules\v1\models\ProyectoEtapasModel';
+        $actions['etapaCreate'] = [
+            'class' => 'app\modules\v1\controllers\etapa\CreateAction',
+            'modelClass' => $areaModel
+        ];
+
+        $actions['etapaUpdate'] = [
+            'class' => 'app\modules\v1\controllers\etapa\UpdateAction',
+            'modelClass' => $areaModel
+        ];
+
+        $actions['etapaDelete'] = [
+            'class' => 'app\modules\v1\controllers\etapa\DeleteAction',
+            'modelClass' => $areaModel
+        ];
+
+        $actions['etapaIndex'] = [
+            'class' => 'app\modules\v1\controllers\etapa\IndexAction',
+            'modelClass' => $areaModel
+        ];
+
+        $actions['etapaView'] = [
+            'class' => 'app\modules\v1\controllers\etapa\ViewAction',
             'modelClass' => $areaModel
         ];
 

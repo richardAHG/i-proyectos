@@ -13,11 +13,19 @@ return [
         ],
         'extraPatterns' => [
             'POST {id}' => 'updateproyecto',
+
             'POST {proyecto_id}/area' => 'areaCreate',
             'PUT {proyecto_id}/area/{id}' => 'areaUpdate',
             'DELETE {proyecto_id}/area/{id}' => 'areaDelete',
             'GET {proyecto_id}/area' => 'areaIndex',
             'GET {proyecto_id}/area/{id}' => 'areaView',
+
+            'POST {proyecto_id}/etapa' => 'etapaCreate',
+            'PUT {proyecto_id}/etapa/{id}' => 'etapaUpdate',
+            'DELETE {proyecto_id}/etapa/{id}' => 'etapaDelete',
+            'GET {proyecto_id}/etapa' => 'etapaIndex',
+            'GET {proyecto_id}/etapa/{id}' => 'etapaView',
+
             'POST {proyecto_id}/colaborador' => 'colaboradorView',
         ],
         'prefix' => '/v1/<usuario_id:\\d>'

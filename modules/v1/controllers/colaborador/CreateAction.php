@@ -66,10 +66,6 @@ class CreateAction extends Action
             throw new BadRequestHttpException("Bad Request");
         }
 
-
-
-
-        //TODO: CAMBIAR TABLA USUARIORECUPAREACIONA TABAL USUARIOS Y SAR COLUMNA NOMBREUSUARIO
         //obtenar datos del usuario emisor
         $usuario_emisor = UsuariosModel::find()
             ->where(['estado' => true, 'id' => $usuario_id])->one();
