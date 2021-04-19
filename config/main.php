@@ -7,6 +7,7 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset'
     ],
+    'bootstrap' => ['log'],
     'components' => [
         'db' => require __DIR__ . '/db.php',
         'response' => [
@@ -28,6 +29,19 @@ $config = [
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true
+        ],
+        'log' => [
+            'traceLevel' => YII_DEBUG ? 3 : 0,
+            'flushInterval' => 1,
+            'targets' => [
+                [
+                    'class' => app\helpers\EventDbTarget::class,
+                    'levels' => ['info'], // 'error', 'warning', 'trace'
+                    'exportInterval' => 1,
+                    'categories' => ["datos"], 
+                    'logVars' => ['_GET', '_POST', '_SERVER'], 
+                ]
+            ]
         ]
     ]
 ];
