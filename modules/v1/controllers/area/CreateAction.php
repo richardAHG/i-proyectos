@@ -68,7 +68,8 @@ class CreateAction extends Action
         if (!$model->save()) {
             throw new BadRequestHttpException('Error al registrar el area');
         }
-
+        (new AreaEvent($model))->creacion();
+        
         return $model;
     }
 }
