@@ -26,7 +26,9 @@ return [
             'GET {proyecto_id}/etapa' => 'etapaIndex',
             'GET {proyecto_id}/etapa/{id}' => 'etapaView',
 
-            'POST {proyecto_id}/colaborador' => 'colaboradorView',
+            'POST {proyecto_id}/colaborador' => 'colaboradorCreate',
+            'GET {proyecto_id}/colaborador/aceptar' => 'colaboradorAceptado',
+            
         ],
         'prefix' => '/v1/<usuario_id:\\d>'
     ],

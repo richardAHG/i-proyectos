@@ -9,12 +9,11 @@
 namespace app\modules\v1\controllers\colaborador;
 
 use app\helpers\Mailer;
+use app\helpers\Utils;
 use app\modules\v1\constants\Globals;
 use app\modules\v1\constants\Params;
 use app\modules\v1\models\ProyectoColaboradoresModel;
-use app\modules\v1\models\query\AreaQuery;
-use app\modules\v1\models\query\EtapaQuery;
-use app\modules\v1\models\UsuarioRecuperacionModel;
+use app\modules\v1\models\query\UsuarioQuery;
 use app\modules\v1\models\UsuariosModel;
 use enmodel\iwasi\library\rest\Action;
 use Yii;
@@ -67,20 +66,10 @@ class CreateAction extends Action
         }
 
         //obtenar datos del usuario emisor
-        $usuario_emisor = UsuariosModel::find()
-            ->where(['estado' => true, 'id' => $usuario_id])->one();
-
-        if (!$usuario_emisor) {
-            throw new BadRequestHttpException("No existe el usuario");
-        }
+        $usuario_emisor = UsuarioQuery::validateUsuario($requestParams['usuario_id']);
 
         //obtenar datos de usuario receptor
-        $usuario_receptor = UsuariosModel::find()
-            ->where(['estado' => true, 'id' => $requestParams['usuario_id']])->one();
-
-        if (!$usuario_receptor) {
-            throw new BadRequestHttpException("No existe el usuario");
-        }
+        $usuario_receptor = UsuarioQuery::validateUsuario($requestParams['usuario_id']);
 
         //obtener estado de invitacion del usuario, invitacion <> aceptado se enviara correo
         $proyectoColaborador = ProyectoColaboradoresModel::find()
@@ -95,30 +84,32 @@ class CreateAction extends Action
             throw new BadRequestHttpException("El usuario ya acepto la invitacion a este proyecto");
         }
 
+        $token = Utils::token("sha1", uniqid(), 6);
         $requestParams['proyecto_id'] = $proyectoId;
         $requestParams['invitacion_id'] = Globals::INVITACION_PENDIENTE;
         $requestParams['creado_por'] = Params::getAudit();
+        $requestParams['token'] = $token;
         $model->load($requestParams, '');
 
         if (!$model->save()) {
             throw new BadRequestHttpException('Error al registrar al colaborador');
         }
 
-        self::envioCorreo($usuario_receptor, 'Invitación a participar en el proyecto', $usuario_emisor);
+        self::envioCorreo($usuario_receptor, 'Invitación a participar en el proyecto', $usuario_emisor, $token, $proyectoId,$model->id);
 
         return $model;
     }
 
-    public static function envioCorreo($usuario_receptor, $subject, $usuario_emisor)
+    public static function envioCorreo($usuario_receptor, $subject, $usuario_emisor, $token, $proyectoId,$id)
     {
         $mail = new Mailer();
+        $propietarioId = $usuario_emisor->id;
+        $ruta = "http://localhost/iwasi/iwasi-proyectos/v1/{$propietarioId}/proyecto/{$proyectoId}/colaborador/aceptar?token={$token}&id={$id}";
         $params = [
-            "ruta" => 'www.iwasi/invitar-particpacion-proyecto',
-            // 'nombre_r' => $usuario_receptor->nombre,
+            "ruta" => $ruta,
             'email_r' => $usuario_receptor->nombre_usuario,
-            // 'nombre_e' => $usuario_emisor->nombre,
             'email_e' => $usuario_emisor->nombre_usuario,
-            'organizacion' => 'iWasi'
+            'organizacion' => 'iWasi',
         ];
 
         $body = Yii::$app->view->renderFile("{$mail->path}/invitar-particpacion-proyecto.php", compact("params"));
