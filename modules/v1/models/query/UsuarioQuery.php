@@ -2,6 +2,7 @@
 
 namespace app\modules\v1\models\query;
 
+use app\modules\v1\models\ProyectosModel;
 use app\modules\v1\models\UsuariosModel;
 use yii\web\BadRequestHttpException;
 
@@ -19,5 +20,14 @@ class UsuarioQuery
             throw new BadRequestHttpException("No existe el usuario");
         }
         return $model;
+    }
+
+    public static function ValidateProject($usuarioId, $proyectoId)
+    {
+        $model = ProyectosModel::findOne(['id' => $proyectoId, 'usuario_id' => $usuarioId]);
+
+        if (!$model) {
+            throw new BadRequestHttpException("EL proyecto no pertence al usuario");
+        }
     }
 }

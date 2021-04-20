@@ -9,6 +9,7 @@
 namespace app\modules\v1\controllers\colaborador;
 
 use app\helpers\Mailer;
+use app\helpers\Response;
 use app\helpers\Utils;
 use app\modules\v1\constants\Globals;
 use app\modules\v1\constants\Params;
@@ -76,28 +77,19 @@ class CreateAction extends Action
         //obtenar datos de usuario receptor
         $usuario_receptor = UsuarioQuery::validateUsuario($requestParams['usuario_id']);
 
+        //Validar si el proyecto pertenece al usuario
+        UsuarioQuery::ValidateProject($usuario_id, $proyectoId);
+
         try {
             //buscar si el usuario ya fue invitado
-            $proyectoColaborador = ProyectoQuery::existProject($requestParams['usuario_id'], $proyectoId, Globals::INVITACION_PENDIENTE);
-
+            $proyectoColaborador = ProyectoQuery::validateInvitation($requestParams['usuario_id'], $proyectoId, Globals::INVITACION_PENDIENTE);
+            // print_r($proyectoColaborador); die();
             if ($proyectoColaborador) {
-                $model = $proyectoColaborador;
-                // throw new BadRequestHttpException("El usuario ya acepto la invitacion a este proyecto");
-
-                //Generamos nuevo token
-                $token = Utils::token("sha1", uniqid(), 6);
-
-                $model->token = $token;
-                if (!$model->save()) {
-                    throw new BadRequestHttpException('Error al registrar al colaborador2');
-                }
-
-                self::envioCorreo($usuario_receptor, 'Invitación a participar en el proyecto', $usuario_emisor, $token, $proyectoId, $model->id);
+                Response::JSON(300,"El usuario ya fue invitado a participar en este proyecto");
             } else {
-
                 //obtener estado de invitacion del usuario, invitacion != aceptado se enviara correo
 
-                $proyectoColaborador = ProyectoQuery::existProject($requestParams['usuario_id'], $proyectoId, Globals::INVITACION_APROBADO);
+                $proyectoColaborador = ProyectoQuery::validateInvitation($requestParams['usuario_id'], $proyectoId, Globals::INVITACION_APROBADO);
                 if ($proyectoColaborador) {
                     throw new BadRequestHttpException("El usuario ya acepto la invitacion a este proyecto");
                 }
@@ -116,7 +108,7 @@ class CreateAction extends Action
                 $requestParams['creado_por'] = Params::getAudit();
                 $requestParams['token'] = $token;
                 $requestParams['fecha_expiracion'] = $fecha_expiracion;
-                
+
                 $model->load($requestParams, '');
 
                 if (!$model->save()) {
@@ -126,7 +118,7 @@ class CreateAction extends Action
                 self::envioCorreo($usuario_receptor, 'Invitación a participar en el proyecto', $usuario_emisor, $token, $proyectoId, $model->id);
             }
         } catch (Exception $ex) {
-            throw $ex->getMessage();
+            throw $ex;
         }
 
         return $model;

@@ -37,7 +37,7 @@ class ProyectoQuery
         }
     }
 
-    public static function existProject($usuarioId, $proyectoId, $invitacionId)
+    public static function validateInvitation($usuarioId, $proyectoId, $invitacionId)
     {
         $model = ProyectoColaboradoresModel::find()
             ->where([
