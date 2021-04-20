@@ -8,15 +8,10 @@
 
 namespace app\modules\v1\controllers\colaborador;
 
-use app\helpers\Response;
-use app\modules\v1\constants\Globals;
-use app\modules\v1\constants\Params;
-use app\modules\v1\models\query\UsuarioQuery;
-use DateTime;
-use DateTimeZone;
 use enmodel\iwasi\library\rest\Action;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\data\DataFilter;
 use yii\web\BadRequestHttpException;
 
 /**
@@ -27,7 +22,7 @@ use yii\web\BadRequestHttpException;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class IndexAction extends Action
+class indexAction extends Action
 {
 
     public function run()
@@ -50,47 +45,29 @@ class IndexAction extends Action
             $requestParams = Yii::$app->getRequest()->getQueryParams();
         }
         $proyectoId = Yii::$app->getRequest()->get($this->customToken, false);
-        $token = Yii::$app->getRequest()->get('token', false);
-        $usuarioId = Yii::$app->getRequest()->get('id', false);
 
         if (!$proyectoId) {
             throw new BadRequestHttpException("Bad Request");
         }
 
-        //Verificar validez de usuario que invita
-        UsuarioQuery::validateUsuario($requestParams['usuario_id']);
-
-        //Verificar validez de usuario que es invitado
-        UsuarioQuery::validateUsuario($requestParams['usuario_id']);
-
         /* @var $modelClass \yii\db\BaseActiveRecord */
         $modelClass = $this->modelClass;
 
-        $usuario = $modelClass::find()
-            ->where([
+        $query = $modelClass::find()
+            ->andWhere([
                 "estado" => true,
-                "proyecto_id" => $proyectoId,
-                "invitacion_id" => Globals::INVITACION_PENDIENTE,
-                "id" => $usuarioId
-            ])
-            ->andWhere("token=:token", [":token" => $token])
-            ->one();
-        if (!$usuario) {
-            throw new BadRequestHttpException("Token invalido");
-        }
+                "proyecto_id" => $proyectoId
+            ]);
 
-        //Verificar la vigencia de la fecha
-        $today = new DateTime('now', new DateTimeZone('America/Lima'));
-        $vigencia = new DateTime($usuario->fecha_expiracion, new DateTimeZone('America/Lima'));
-        if ($today <= $vigencia) {
-            $usuario->invitacion_id = Globals::INVITACION_APROBADO;
-            $usuario->actualizado_por = Params::getAudit();
-            if (!$usuario->save()) {
-                throw new BadRequestHttpException("Error al procesar la información");
-            }
-            Response::JSON(200, "Proceso Finalizádo con éxito");
-        } else {
-            throw new BadRequestHttpException("La invitación ya expiró");
-        }
+        return Yii::createObject([
+            'class' => ActiveDataProvider::className(),
+            'query' => $query,
+            'pagination' => [
+                'params' => $requestParams,
+            ],
+            'sort' => [
+                'params' => $requestParams,
+            ],
+        ]);
     }
 }
