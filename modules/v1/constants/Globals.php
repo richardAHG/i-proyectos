@@ -7,4 +7,6 @@ class Globals
     const INVITACION_PENDIENTE = 1;
     const INVITACION_APROBADO = 2;
     const INVITACION_RECHAZADO = 3;
+
+    const GRUPO_DIAS_VALIDOS = 'DIAS_VALIDOS';
 }

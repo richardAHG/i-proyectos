@@ -16,6 +16,7 @@ use Yii;
  * @property string|null $eliminado_por
  * @property bool $estado
  * @property string|null $token
+ * @property string|null $fecha_expiracion
  */
 class ProyectoColaboradoresModel extends \yii\db\ActiveRecord
 {
@@ -38,6 +39,7 @@ class ProyectoColaboradoresModel extends \yii\db\ActiveRecord
             [['proyecto_id', 'usuario_id', 'invitacion_id'], 'integer'],
             [['creado_por', 'actualizado_por', 'eliminado_por'], 'string'],
             [['estado'], 'boolean'],
+            [['fecha_expiracion'], 'safe'],
             [['token'], 'string', 'max' => 6],
         ];
     }
@@ -57,6 +59,7 @@ class ProyectoColaboradoresModel extends \yii\db\ActiveRecord
             'eliminado_por' => 'Eliminado Por',
             'estado' => 'Estado',
             'token' => 'Token',
+            'fecha_expiracion' => 'Fecha Expiracion',
         ];
     }
 }

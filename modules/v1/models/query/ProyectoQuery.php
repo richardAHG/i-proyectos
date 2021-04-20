@@ -2,6 +2,7 @@
 
 namespace app\modules\v1\models\query;
 
+use app\modules\v1\models\ProyectoColaboradoresModel;
 use app\modules\v1\models\ProyectosModel;
 use yii\web\BadRequestHttpException;
 
@@ -34,5 +35,18 @@ class ProyectoQuery
         if (isset($exist)) {
             throw new BadRequestHttpException("Name already exists, process canceled");
         }
+    }
+
+    public static function existProject($usuarioId, $proyectoId, $invitacionId)
+    {
+        $model = ProyectoColaboradoresModel::find()
+            ->where([
+                'estado' => true,
+                'usuario_id' => $usuarioId,
+                'proyecto_id' => $proyectoId,
+                'invitacion_id' => $invitacionId
+            ])
+            ->one();
+        return $model;
     }
 }

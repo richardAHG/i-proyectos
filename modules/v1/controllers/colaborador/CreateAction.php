@@ -12,10 +12,15 @@ use app\helpers\Mailer;
 use app\helpers\Utils;
 use app\modules\v1\constants\Globals;
 use app\modules\v1\constants\Params;
+use app\modules\v1\models\ParametrosModel;
 use app\modules\v1\models\ProyectoColaboradoresModel;
+use app\modules\v1\models\query\ProyectoQuery;
 use app\modules\v1\models\query\UsuarioQuery;
 use app\modules\v1\models\UsuariosModel;
+use DateInterval;
+use DateTime;
 use enmodel\iwasi\library\rest\Action;
+use Exception;
 use Yii;
 use yii\base\Model;
 use yii\web\BadRequestHttpException;
@@ -66,41 +71,68 @@ class CreateAction extends Action
         }
 
         //obtenar datos del usuario emisor
-        $usuario_emisor = UsuarioQuery::validateUsuario($requestParams['usuario_id']);
+        $usuario_emisor = UsuarioQuery::validateUsuario($usuario_id);
 
         //obtenar datos de usuario receptor
         $usuario_receptor = UsuarioQuery::validateUsuario($requestParams['usuario_id']);
 
-        //obtener estado de invitacion del usuario, invitacion <> aceptado se enviara correo
-        $proyectoColaborador = ProyectoColaboradoresModel::find()
-            ->where([
-                'estado' => true,
-                'usuario_id' => $requestParams['usuario_id'],
-                'proyecto_id' => $proyectoId,
-                'invitacion_id' => Globals::INVITACION_APROBADO
-            ])
-            ->one();
-        if ($proyectoColaborador) {
-            throw new BadRequestHttpException("El usuario ya acepto la invitacion a este proyecto");
+        try {
+            //buscar si el usuario ya fue invitado
+            $proyectoColaborador = ProyectoQuery::existProject($requestParams['usuario_id'], $proyectoId, Globals::INVITACION_PENDIENTE);
+
+            if ($proyectoColaborador) {
+                $model = $proyectoColaborador;
+                // throw new BadRequestHttpException("El usuario ya acepto la invitacion a este proyecto");
+
+                //Generamos nuevo token
+                $token = Utils::token("sha1", uniqid(), 6);
+
+                $model->token = $token;
+                if (!$model->save()) {
+                    throw new BadRequestHttpException('Error al registrar al colaborador2');
+                }
+
+                self::envioCorreo($usuario_receptor, 'Invitación a participar en el proyecto', $usuario_emisor, $token, $proyectoId, $model->id);
+            } else {
+
+                //obtener estado de invitacion del usuario, invitacion != aceptado se enviara correo
+
+                $proyectoColaborador = ProyectoQuery::existProject($requestParams['usuario_id'], $proyectoId, Globals::INVITACION_APROBADO);
+                if ($proyectoColaborador) {
+                    throw new BadRequestHttpException("El usuario ya acepto la invitacion a este proyecto");
+                }
+
+                //traer dias habiles
+                $dias = ParametrosModel::findOne(['grupo' => Globals::GRUPO_DIAS_VALIDOS, 'estado' => true]);
+
+                //agregar dias validos
+                $fecha = new DateTime('now');
+                $fecha->add(new DateInterval("P{$dias->valor}D"));
+                $fecha_expiracion = $fecha->format('Y-m-d');
+
+                $token = Utils::token("sha1", uniqid(), 6);
+                $requestParams['proyecto_id'] = $proyectoId;
+                $requestParams['invitacion_id'] = Globals::INVITACION_PENDIENTE;
+                $requestParams['creado_por'] = Params::getAudit();
+                $requestParams['token'] = $token;
+                $requestParams['fecha_expiracion'] = $fecha_expiracion;
+                
+                $model->load($requestParams, '');
+
+                if (!$model->save()) {
+                    throw new BadRequestHttpException('Error al registrar al colaborador');
+                }
+
+                self::envioCorreo($usuario_receptor, 'Invitación a participar en el proyecto', $usuario_emisor, $token, $proyectoId, $model->id);
+            }
+        } catch (Exception $ex) {
+            throw $ex->getMessage();
         }
-
-        $token = Utils::token("sha1", uniqid(), 6);
-        $requestParams['proyecto_id'] = $proyectoId;
-        $requestParams['invitacion_id'] = Globals::INVITACION_PENDIENTE;
-        $requestParams['creado_por'] = Params::getAudit();
-        $requestParams['token'] = $token;
-        $model->load($requestParams, '');
-
-        if (!$model->save()) {
-            throw new BadRequestHttpException('Error al registrar al colaborador');
-        }
-
-        self::envioCorreo($usuario_receptor, 'Invitación a participar en el proyecto', $usuario_emisor, $token, $proyectoId,$model->id);
 
         return $model;
     }
 
-    public static function envioCorreo($usuario_receptor, $subject, $usuario_emisor, $token, $proyectoId,$id)
+    public static function envioCorreo($usuario_receptor, $subject, $usuario_emisor, $token, $proyectoId, $id)
     {
         $mail = new Mailer();
         $propietarioId = $usuario_emisor->id;
