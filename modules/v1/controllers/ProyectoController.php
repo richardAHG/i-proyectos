@@ -6,7 +6,7 @@ use app\rest\ActiveController;
 
 class ProyectoController extends ActiveController
 {
-    public $modelClass = 'app\modules\v1\models\ProyectosModel';
+    public $modelClass = 'app\modules\v1\models\custom\ProyectosCustomModel';
 
     public function actions()
     {
