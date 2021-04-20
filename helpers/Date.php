@@ -4,6 +4,7 @@ namespace app\helpers;
 
 use DateTime;
 use DateInterval;
+use DateTimeZone;
 use Exception;
 
 class Date
@@ -14,7 +15,6 @@ class Date
      */
     const DEFAULT_DATE = "01-01-1900";
 
-
     /**
      * Obtiene la fecha actual en un formato dado
      * @param string $formato formato de fecha en php.
@@ -22,7 +22,8 @@ class Date
      */
     public static function getCurrentDate($formato = "Y-m-d")
     {
-        $fecha = new DateTime("now");
+        $fecha = new DateTime("now", new DateTimeZone('America/Lima'));
+
         return $fecha->format($formato);
     }
 
@@ -33,7 +34,7 @@ class Date
      */
     public static function getTime($formato = "H:i:s")
     {
-        $hora = new DateTime("now");
+        $hora = new DateTime("now", new DateTimeZone('America/Lima'));
         return $hora->format($formato);
     }
 
@@ -56,7 +57,7 @@ class Date
      */
     public static function format($fecha = null, $nuevoFormato = null)
     {
-        $fecha = new DateTime($fecha);
+        $fecha = new DateTime($fecha, new DateTimeZone('America/Lima'));
         return $fecha->format($nuevoFormato);
     }
 
@@ -212,8 +213,8 @@ class Date
 
     public static function diff($date_start, $date_end, $same_day = false)
     {
-        $datetimestart = new DateTime(self::format($date_end, "Y-m-d"));
-        $datetimeend   = new DateTime(self::format($date_start, "Y-m-d"));
+        $datetimestart = new DateTime(self::format($date_end, "Y-m-d"), new DateTimeZone('America/Lima'));
+        $datetimeend   = new DateTime(self::format($date_start, "Y-m-d"), new DateTimeZone('America/Lima'));
         if ($same_day) {
             $datetimestart->add(new DateInterval('P1D'));
         }
@@ -280,5 +281,4 @@ class Date
         }
         return true;
     }
-
 }

@@ -10,7 +10,10 @@ namespace app\modules\v1\controllers\colaborador;
 
 use app\helpers\Response;
 use app\modules\v1\constants\Globals;
+use app\modules\v1\constants\Params;
 use app\modules\v1\models\query\UsuarioQuery;
+use DateTime;
+use DateTimeZone;
 use enmodel\iwasi\library\rest\Action;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -76,11 +79,18 @@ class IndexAction extends Action
             throw new BadRequestHttpException("Token invalido");
         }
 
-        
-        $usuario->invitacion_id = Globals::INVITACION_APROBADO;
-        if (!$usuario->save()) {
-            throw new BadRequestHttpException("Error al procesar la información");
+        //Verificar la vigencia de la fecha
+        $today = new DateTime('now', new DateTimeZone('America/Lima'));
+        $vigencia = new DateTime($usuario->fecha_expiracion, new DateTimeZone('America/Lima'));
+        if ($today <= $vigencia) {
+            $usuario->invitacion_id = Globals::INVITACION_APROBADO;
+            $usuario->actualizado_por = Params::getAudit();
+            if (!$usuario->save()) {
+                throw new BadRequestHttpException("Error al procesar la información");
+            }
+            Response::JSON(200, "Proceso Finalizádo con éxito");
+        } else {
+            throw new BadRequestHttpException("La invitación ya expiró");
         }
-        Response::JSON(200, "Proceso Finalizádo con éxito");
     }
 }
