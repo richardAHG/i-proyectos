@@ -19,9 +19,10 @@ class ProyectoController extends ActiveController
             'class' => 'app\modules\v1\controllers\proyecto\UpdateAction',
             'modelClass' => $this->modelClass
         ];
+        
 
-        // Area
-        $areaModel = 'app\modules\v1\models\ProyectoAreasModel';
+        // Area        
+        $areaModel = 'app\modules\v1\models\custom\ProyectoAreasCustomModel';
         $actions['areaCreate'] = [
             'class' => 'app\modules\v1\controllers\area\CreateAction',
             'modelClass' => $areaModel
@@ -48,7 +49,7 @@ class ProyectoController extends ActiveController
         ];
 
         // etapa
-        $areaModel = 'app\modules\v1\models\ProyectoEtapasModel';
+        $areaModel = 'app\modules\v1\models\custom\ProyectoEtapasCustomModel';
         $actions['etapaCreate'] = [
             'class' => 'app\modules\v1\controllers\etapa\CreateAction',
             'modelClass' => $areaModel
