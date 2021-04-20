@@ -86,7 +86,10 @@ class ProyectoController extends ActiveController
             'class' => 'app\modules\v1\controllers\colaborador\IndexAction',
             'modelClass' => $colaboradorModel
         ];
-
+        $actions['colaboradorIndex'] = [
+            'class' => 'app\modules\v1\controllers\colaborador\colaboradorindexAction',
+            'modelClass' => $colaboradorModel
+        ];
 
         return $actions;
     }

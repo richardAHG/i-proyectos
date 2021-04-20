@@ -28,6 +28,7 @@ return [
 
             'POST {proyecto_id}/colaborador' => 'colaboradorCreate',
             'GET {proyecto_id}/colaborador/aceptar' => 'colaboradorAceptado',
+            'GET {proyecto_id}/colaborador' => 'colaboradorIndex',
             
         ],
         'prefix' => '/v1/<usuario_id:\\d>'
