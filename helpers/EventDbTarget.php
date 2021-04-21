@@ -37,7 +37,7 @@ class EventDbTarget extends DbTarget
 
             $tabla = ParametrosModel::findOne([
                 'grupo' => 'TABLA',
-                'nombre' => str_replace('compromisos.','', $data['tabla']),
+                'nombre' => str_replace('proyectos.','', $data['tabla']),
                 'estado' => true
             ]);
 
@@ -62,4 +62,3 @@ class EventDbTarget extends DbTarget
         return $evento[$method];
     }
 }
-?>

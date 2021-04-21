@@ -10,6 +10,7 @@ namespace app\modules\v1\controllers\area;
 
 use app\modules\v1\constants\Params;
 use app\modules\v1\models\query\AreaQuery;
+use app\modules\v1\utils\event\AreaEvent;
 use enmodel\iwasi\library\rest\Action;
 use Yii;
 use yii\base\Model;
@@ -68,8 +69,7 @@ class CreateAction extends Action
         if (!$model->save()) {
             throw new BadRequestHttpException('Error al registrar el area');
         }
-        // (new AreaEvent($model))->creacion();
-
+        (new AreaEvent($model))->creacion();
         return $model;
     }
 }

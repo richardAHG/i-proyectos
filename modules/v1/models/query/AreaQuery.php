@@ -22,7 +22,7 @@ class AreaQuery
         $rpta = $etapaModel->one();
 
         if (isset($rpta)) {
-            throw new ServerErrorHttpException('La Etapa ya existe, ingrese otros datos');
+            throw new ServerErrorHttpException('La Area ya existe, ingrese otros datos');
         }
     }
 }
