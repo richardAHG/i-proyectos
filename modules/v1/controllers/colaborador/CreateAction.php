@@ -78,7 +78,7 @@ class CreateAction extends Action
         $usuario_receptor = UsuarioQuery::validateUsuario($requestParams['usuario_id']);
 
         //Validar si el proyecto pertenece al usuario
-        UsuarioQuery::ValidateProject($usuario_id, $proyectoId);
+        UsuarioQuery::ValidateUserProject($usuario_id, $proyectoId);
 
         try {
             //buscar si el usuario ya fue invitado

@@ -17,7 +17,7 @@ class EventDbTarget extends DbTarget
             
             list($data, $level, $category, $timestamp) = $message;
 
-            if (!is_stringg($data)) {
+            if (!is_string($data)) {
                 // exceptions may not be serializable if in the call stack somewhere is a Closure
                 if ($data instanceof \Throwable || $data instanceof \Exception) {
                     $data = (string) $data;

@@ -6,11 +6,11 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace app\modules\v1\controllers\area;
+namespace app\modules\v1\controllers\area\colaborador;
 
 use app\modules\v1\constants\Params;
-use app\modules\v1\models\query\AreaQuery;
-use enmodel\iwasi\library\rest\Action;
+use app\modules\v1\controllers\area\colaborador\Action;
+use app\modules\v1\models\query\ProyectoQuery;
 use Yii;
 use yii\base\Model;
 use yii\web\BadRequestHttpException;
@@ -53,20 +53,22 @@ class CreateAction extends Action
         ]);
 
         $requestParams = Yii::$app->getRequest()->getBodyParams();
-        $proyectoId = Yii::$app->getRequest()->get($this->customToken, false);
+        $proyectoId = Yii::$app->getRequest()->get($this->proyectoId, false);
+        $areaId = Yii::$app->getRequest()->get($this->areaId, false);
 
-        if (!$proyectoId) {
-            throw new BadRequestHttpException("Bad Request");
-        }
+        // Validar que el usuario pertenesca al proyecto, ya que el area pertenece a un determinado proyecto
+        ProyectoQuery::validateProyectoColaborador($proyectoId, $requestParams['usuario_id']);
 
-        //validación de nombres duplicados
-        AreaQuery::validateDuplicate($requestParams['nombre'],$proyectoId);
+        //Validar que el usuario no se registre en varias areas de un mismo proyecto
+        ProyectoQuery::valdiateAreaColaborador($proyectoId, $requestParams['usuario_id']);
 
-        $requestParams['proyecto_id'] = $proyectoId;
-        $requestParams['creado_por'] = Params::getAudit();
+        $requestParams['area_id'] = $areaId;
+        $requestParams['colaborador_id'] = $requestParams['usuario_id'];
+        $requestParams['fecha_registro'] = Params::getDate();
         $model->load($requestParams, '');
+        // print_r($model); die();
         if (!$model->save()) {
-            throw new BadRequestHttpException('Error al registrar el area');
+            throw new BadRequestHttpException('Error al asignar el colaborador al area');
         }
         // (new AreaEvent($model))->creacion();
 

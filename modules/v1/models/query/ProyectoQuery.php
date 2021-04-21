@@ -2,6 +2,7 @@
 
 namespace app\modules\v1\models\query;
 
+use app\modules\v1\models\ProyectoAreasModel;
 use app\modules\v1\models\ProyectoColaboradoresModel;
 use app\modules\v1\models\ProyectosModel;
 use yii\web\BadRequestHttpException;
@@ -48,5 +49,55 @@ class ProyectoQuery
             ])
             ->one();
         return $model;
+    }
+
+    /**
+     * Valida si area pertenece al proyecto
+     *
+     * @param int $prouyectoId
+     * @param int $areaId
+     * @return void
+     */
+    public static function ValidateProjectArea($proyectoId, $areaId)
+    {
+        $model = ProyectoAreasModel::findOne(['id' => $areaId, 'proyecto_id' => $proyectoId]);
+
+        if (!$model) {
+            throw new BadRequestHttpException("El area no pertence al proyecto");
+        }
+    }
+
+    public static function validateProyectoColaborador($proyectoId, $colaboradorId)
+    {
+        $model = ProyectoColaboradoresModel::findOne([
+            'proyecto_id' => $proyectoId,
+            'usuario_id' => $colaboradorId,
+            'estado' => true
+        ]);
+
+        if (!$model) {
+            throw new BadRequestHttpException("El usuario no pertenece al proyecto");
+        }
+    }
+
+    public static function valdiateAreaColaborador($proyectoId, $usuarioId)
+    {
+        $query = (new \yii\db\Query())
+            ->select(['pa.id'])
+            ->from('proyectos.proyecto_areas pa')
+            ->join(
+                'INNER JOIN',
+                'proyectos.area_colaboradores ac',
+                'pa.id=ac.area_id and pa.estado is true'
+            )
+            ->where([
+                'pa.proyecto_id' => $proyectoId,
+                'colaborador_id' => $usuarioId
+            ])
+            ->one();
+
+        if ($query) {
+            throw new BadRequestHttpException("el usuario ya pertenece a un area del mismo proyecto");
+        }
     }
 }

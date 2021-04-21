@@ -48,6 +48,29 @@ class ProyectoController extends ActiveController
             'modelClass' => $areaModel
         ];
 
+        // Area Colaborador
+        $areaColaboradorModel = 'app\modules\v1\models\AreaColaboradoresModel';
+        $actions['areaColaboradorCreate'] = [
+            'class' => 'app\modules\v1\controllers\area\colaborador\CreateAction',
+            'modelClass' => $areaColaboradorModel
+        ];
+
+        $actions['areaColaboradorDelete'] = [
+            'class' => 'app\modules\v1\controllers\area\colaborador\DeleteAction',
+            'modelClass' => $areaColaboradorModel
+        ];
+
+        $actions['areaColaboradorIndex'] = [
+            'class' => 'app\modules\v1\controllers\area\colaborador\IndexAction',
+            'modelClass' => $areaColaboradorModel
+        ];
+
+        $actions['areaColaboradorView'] = [
+            'class' => 'app\modules\v1\controllers\area\colaborador\ViewAction',
+            'modelClass' => $areaColaboradorModel
+        ];
+
+
         // etapa
         $areaModel = 'app\modules\v1\models\custom\ProyectoEtapasCustomModel';
         $actions['etapaCreate'] = [
@@ -88,6 +111,14 @@ class ProyectoController extends ActiveController
         ];
         $actions['colaboradorIndex'] = [
             'class' => 'app\modules\v1\controllers\colaborador\indexAction',
+            'modelClass' => $colaboradorModel
+        ];
+        $actions['colaboradorView'] = [
+            'class' => 'app\modules\v1\controllers\colaborador\ViewAction',
+            'modelClass' => $colaboradorModel
+        ];
+        $actions['colaboradorDelete'] = [
+            'class' => 'app\modules\v1\controllers\colaborador\DeleteAction',
             'modelClass' => $colaboradorModel
         ];
 

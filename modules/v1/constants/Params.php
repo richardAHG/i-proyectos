@@ -32,4 +32,8 @@ class Params
         return "({$date},{$usuario})";
     }
 
+    public static function getDate()
+    {
+        return Date::getDateTime();
+    }
 }

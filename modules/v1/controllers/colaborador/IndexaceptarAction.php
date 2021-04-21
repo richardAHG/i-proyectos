@@ -53,7 +53,7 @@ class IndexaceptarAction extends Action
         $token = Yii::$app->getRequest()->get('token', false);
         $usuarioId = Yii::$app->getRequest()->get('id', false);
 
-        if (!$proyectoId) {
+        if (!$proyectoId || !$token || !$usuarioId) {
             throw new BadRequestHttpException("Bad Request");
         }
 

@@ -22,7 +22,7 @@ class UsuarioQuery
         return $model;
     }
 
-    public static function ValidateProject($usuarioId, $proyectoId)
+    public static function ValidateUserProject($usuarioId, $proyectoId)
     {
         $model = ProyectosModel::findOne(['id' => $proyectoId, 'usuario_id' => $usuarioId]);
 
