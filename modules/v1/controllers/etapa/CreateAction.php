@@ -11,6 +11,8 @@ namespace app\modules\v1\controllers\etapa;
 use app\modules\v1\constants\Params;
 use app\modules\v1\models\query\EtapaQuery;
 use app\modules\v1\utils\event\EtapaEvent;
+use app\modules\v1\utils\format\Format;
+use app\modules\v1\utils\format\FormatFields;
 use enmodel\iwasi\library\rest\Action;
 use Yii;
 use yii\base\Model;
@@ -53,7 +55,10 @@ class CreateAction extends Action
             'scenario' => $this->scenario,
         ]);
 
-        $requestParams = Yii::$app->getRequest()->getBodyParams();
+        $params = Yii::$app->getRequest()->getBodyParams(); 
+        $estructura = FormatFields::Etapa();
+        $requestParams = Format::init($params, $estructura);
+
         $proyectoId = Yii::$app->getRequest()->get($this->customToken, false);
 
         if (!$proyectoId) {
@@ -70,7 +75,7 @@ class CreateAction extends Action
             throw new BadRequestHttpException('Error al registrar el proyecto');
         }
 
-        (new EtapaEvent($model))->creacion();
-        return $model;
+        $data = Format::init($model, $estructura, true);
+        return $data;
     }
 }
