@@ -43,4 +43,14 @@ class FormatFields
         ];
     }
 
+    public static function Proyecto(){
+        return[    
+            'id' => 'proyectId',
+            'usuario_id' => 'userId',
+            'nombre' => 'name',
+            'color'=>'colour',
+            'logo' => 'logo',
+            'descripcion' => 'description'
+        ];
+    }
 }
