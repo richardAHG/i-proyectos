@@ -13,7 +13,7 @@ class ProyectoColaboradoresCustomModel extends ProyectoColaboradoresModel
 
     public function fields()
     {
-        return ['proyectId','userId','invitationId',"collaboratorId"];
+        return ['proyectId','userId','invitationId','collaboratorId'];
     }
 
     public function afterFind()

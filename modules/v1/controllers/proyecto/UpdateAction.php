@@ -14,6 +14,8 @@ use app\modules\v1\models\clases\ProyectoArchivo;
 use app\modules\v1\models\clases\ProyectoInformacion;
 use app\modules\v1\models\query\ProyectoQuery;
 use app\modules\v1\utils\event\ProyectoEvent;
+use app\modules\v1\utils\format\Format;
+use app\modules\v1\utils\format\FormatFields;
 use app\modules\v1\utils\ProyectoUtil;
 use app\rest\Action;
 use Exception;
@@ -55,7 +57,10 @@ class UpdateAction extends Action
             call_user_func($this->checkAccess, $this->id, $model);
         }
 
-        $requestParams = Yii::$app->getRequest()->getBodyParams();
+        $params = Yii::$app->getRequest()->getBodyParams(); 
+        $estructura = FormatFields::Proyecto();
+        $requestParams = Format::init($params, $estructura);
+
         $file = UploadedFile::getInstanceByName('logo');
 
         $usuarioId = Yii::$app->getRequest()->get('usuario_id', false);
@@ -94,7 +99,7 @@ class UpdateAction extends Action
             throw $ex;
         }
 
-        (new ProyectoEvent($model))->actualizacion();
-        return $model;
+        $data = Format::init($model, $estructura, true);
+        return $data;
     }
 }

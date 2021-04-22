@@ -6,6 +6,8 @@ use app\modules\v1\constants\Params;
 use app\modules\v1\models\clases\ProyectoInformacion;
 use app\modules\v1\models\query\ProyectoQuery;
 use app\modules\v1\utils\event\ProyectoEvent;
+use app\modules\v1\utils\format\Format;
+use app\modules\v1\utils\format\FormatFields;
 use app\modules\v1\utils\ProyectoUtil;
 use app\rest\Action;
 use Exception;
@@ -44,7 +46,11 @@ class CreateAction extends Action
         $model = new $this->modelClass([
             'scenario' => $this->scenario,
         ]);
-        $requestParams = Yii::$app->getRequest()->getBodyParams();
+
+        $params = Yii::$app->getRequest()->getBodyParams(); 
+        $estructura = FormatFields::Proyecto();
+        $requestParams = Format::init($params, $estructura);
+
         $file = UploadedFile::getInstanceByName('logo');
         $usuario_id = Yii::$app->getRequest()->get('usuario_id', false);
 
@@ -70,7 +76,7 @@ class CreateAction extends Action
             $transaction->rollBack();
             echo $ex->getMessage();
         }
-        (new ProyectoEvent($model))->creacion();
-        return $model;
+        $data = Format::init($model, $estructura, true);
+        return $data;
     }
 }

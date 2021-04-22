@@ -13,6 +13,8 @@ use app\modules\v1\models\clases\Archivos;
 use app\modules\v1\models\clases\ProyectoArchivo;
 use app\modules\v1\models\clases\ProyectoInformacion;
 use app\modules\v1\utils\event\ProyectoEvent;
+use app\modules\v1\utils\format\Format;
+use app\modules\v1\utils\format\FormatFields;
 use app\rest\Action;
 use Exception;
 use Yii;
@@ -67,7 +69,8 @@ class DeleteAction extends Action
             throw $ex;
         }
 
-        (new ProyectoEvent($model))->eliminacion();
-        return $model;
+        $estructura = FormatFields::Proyecto();
+        $data = Format::init($model, $estructura, true);
+        return $data;
     }
 }
