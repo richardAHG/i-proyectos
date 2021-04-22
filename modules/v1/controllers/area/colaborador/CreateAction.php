@@ -11,6 +11,7 @@ namespace app\modules\v1\controllers\area\colaborador;
 use app\modules\v1\constants\Params;
 use app\modules\v1\controllers\area\colaborador\Action;
 use app\modules\v1\models\query\ProyectoQuery;
+use app\modules\v1\utils\event\AreaEvent;
 use Yii;
 use yii\base\Model;
 use yii\web\BadRequestHttpException;
@@ -71,7 +72,7 @@ class CreateAction extends Action
             throw new BadRequestHttpException('Error al asignar el colaborador al area');
         }
         // (new AreaEvent($model))->creacion();
-
+        (new AreaEvent($model))->creacionAreacolaborador($areaId, $requestParams['usuario_id']);
         return $model;
     }
 }

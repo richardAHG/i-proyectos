@@ -4,7 +4,7 @@ namespace app\modules\v1\utils\event;
 
 use Yii;
 
-class AreaEvent extends Event
+class ColaboradorEvent extends Event
 {
     public $model;
     public function __construct($tableModel)
@@ -36,24 +36,6 @@ class AreaEvent extends Event
             'id' => $this->model->id,
             'tabla' => $this->model::tableName(),
             'mensaje' => "Se actualizó el id # {$this->model->id}"
-        ], 'datos');
-    }
-
-    public function creacionAreacolaborador($areaId, $usuarioId)
-    {
-        Yii::info([
-            'id' => $this->model->id,
-            'tabla' => $this->model::tableName(),
-            'mensaje' => "Se registró el id # {$this->model->id}, del area_id {$areaId} al usuario {$usuarioId}"
-        ], 'datos');
-    }
-
-    public function eliminacionAreaColaborador($areaId, $usuarioId)
-    {
-        Yii::info([
-            'id' => $this->model->id,
-            'tabla' => $this->model::tableName(),
-            'mensaje' => "Se registró el id # {$this->model->id}, del area_id {$areaId}"
         ], 'datos');
     }
 

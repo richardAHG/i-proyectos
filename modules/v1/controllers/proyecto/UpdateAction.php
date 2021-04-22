@@ -13,6 +13,7 @@ use app\modules\v1\models\clases\Archivos;
 use app\modules\v1\models\clases\ProyectoArchivo;
 use app\modules\v1\models\clases\ProyectoInformacion;
 use app\modules\v1\models\query\ProyectoQuery;
+use app\modules\v1\utils\event\ProyectoEvent;
 use app\modules\v1\utils\ProyectoUtil;
 use app\rest\Action;
 use Exception;
@@ -93,6 +94,7 @@ class UpdateAction extends Action
             throw $ex;
         }
 
+        (new ProyectoEvent($model))->actualizacion();
         return $model;
     }
 }

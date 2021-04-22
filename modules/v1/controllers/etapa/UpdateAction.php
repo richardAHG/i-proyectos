@@ -10,6 +10,7 @@ namespace app\modules\v1\controllers\etapa;
 
 use app\modules\v1\constants\Params;
 use app\modules\v1\models\query\EtapaQuery;
+use app\modules\v1\utils\event\EtapaEvent;
 use enmodel\iwasi\library\rest\Action;
 use Yii;
 use yii\base\Model;
@@ -66,6 +67,7 @@ class UpdateAction extends Action
             throw new BadRequestHttpException('Error al actualizar el proyecto');
         }
 
+        (new EtapaEvent($model))->actualizacion();
         return $model;
     }
 }

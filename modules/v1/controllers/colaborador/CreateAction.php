@@ -18,6 +18,7 @@ use app\modules\v1\models\ProyectoColaboradoresModel;
 use app\modules\v1\models\query\ProyectoQuery;
 use app\modules\v1\models\query\UsuarioQuery;
 use app\modules\v1\models\UsuariosModel;
+use app\modules\v1\utils\event\ColaboradorEvent;
 use DateInterval;
 use DateTime;
 use enmodel\iwasi\library\rest\Action;
@@ -120,7 +121,7 @@ class CreateAction extends Action
         } catch (Exception $ex) {
             throw $ex;
         }
-
+        (new ColaboradorEvent($model))->creacion();
         return $model;
     }
 

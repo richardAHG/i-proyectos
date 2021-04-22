@@ -12,6 +12,7 @@ use app\modules\v1\constants\Params as ConstantsParams;
 use app\modules\v1\models\clases\Archivos;
 use app\modules\v1\models\clases\ProyectoArchivo;
 use app\modules\v1\models\clases\ProyectoInformacion;
+use app\modules\v1\utils\event\ProyectoEvent;
 use app\rest\Action;
 use Exception;
 use Yii;
@@ -65,6 +66,8 @@ class DeleteAction extends Action
             $transaction->rollBack();
             throw $ex;
         }
+
+        (new ProyectoEvent($model))->eliminacion();
         return $model;
     }
 }

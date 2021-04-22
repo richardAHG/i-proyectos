@@ -12,6 +12,7 @@ use app\helpers\Response;
 use app\modules\v1\constants\Globals;
 use app\modules\v1\constants\Params;
 use app\modules\v1\models\query\UsuarioQuery;
+use app\modules\v1\utils\event\ColaboradorEvent;
 use DateTime;
 use DateTimeZone;
 use enmodel\iwasi\library\rest\Action;
