@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\v1\controllers\area\colaborador;
+namespace app\modules\v1\controllers\administrador;
 
 use app\modules\v1\models\query\ProyectoQuery;
 use app\modules\v1\models\query\UsuarioQuery;
@@ -19,31 +19,21 @@ class Action extends RestAction
 {
     public $usuarioId = "usuario_id";
     public $proyectoId = "proyecto_id";
-    public $areaId = "area_id";
 
     public function init()
     {
         parent::init();
         $usuarioId = Yii::$app->getRequest()->get($this->usuarioId, false);
         $proyectoId = Yii::$app->getRequest()->get($this->proyectoId, false);
-        $areaId = Yii::$app->getRequest()->get($this->areaId, false);
         
-        if (!$usuarioId || !$proyectoId || !$areaId) {
+        if (!$usuarioId || !$proyectoId) {
             throw new BadRequestHttpException("Bad Request");
         }
 
         //validar si el proyecto pertenece al usuario
         UsuarioQuery::ValidateUserProject($usuarioId, $proyectoId);
-
-        //validar si el area pertenece al proyecto
-        ProyectoQuery::ValidateProjectArea($proyectoId, $areaId);
         
         $this->findModel = function ($id, $action) {
-
-            $areaId = Yii::$app->getRequest()->get($this->areaId, false);
-            if (!$areaId) {
-                throw new BadRequestHttpException("Bad Request");
-            }
 
             $modelClass = $action->modelClass;
             // $model = $modelClass::findIfBelongsToProject($id, $proyectoId);
@@ -51,7 +41,6 @@ class Action extends RestAction
                 ->where(["id" => $id])
                 ->andWhere([
                     "estado" => true,
-                    'area_id' => $areaId
                 ])
                 ->one();
             if (isset($model)) {

@@ -37,6 +37,11 @@ return [
             'GET {proyecto_id}/colaborador' => 'colaboradorIndex',
             'GET {proyecto_id}/colaborador/{id}' => 'colaboradorView',
             'DELETE {proyecto_id}/colaborador/{id}' => 'colaboradorDelete',
+
+            'POST {proyecto_id}/administrador' => 'administradorCreate',
+            'GET {proyecto_id}/administrador' => 'administradorIndex',
+            'GET {proyecto_id}/administrador/{id}' => 'administradorView',
+            'DELETE {proyecto_id}/administrador/{id}' => 'administradorDelete',
             
         ],
         'prefix' => '/v1/<usuario_id:\\d>'
