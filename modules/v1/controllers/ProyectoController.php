@@ -122,6 +122,28 @@ class ProyectoController extends ActiveController
             'modelClass' => $colaboradorModel
         ];
 
+        // administrador
+        $administradorModel = 'app\modules\v1\models\ProyectoAdministradoresModel';
+        $actions['administradorCreate'] = [
+            'class' => 'app\modules\v1\controllers\administrador\CreateAction',
+            'modelClass' => $administradorModel
+        ];
+
+        $actions['administradorDelete'] = [
+            'class' => 'app\modules\v1\controllers\administrador\DeleteAction',
+            'modelClass' => $administradorModel
+        ];
+
+        $actions['administradorIndex'] = [
+            'class' => 'app\modules\v1\controllers\administrador\IndexAction',
+            'modelClass' => $administradorModel
+        ];
+
+        $actions['administradorView'] = [
+            'class' => 'app\modules\v1\controllers\administrador\ViewAction',
+            'modelClass' => $administradorModel
+        ];
+
         return $actions;
     }
 }
