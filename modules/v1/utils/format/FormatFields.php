@@ -23,7 +23,15 @@ class FormatFields
         ];
     }
 
-
-
+    public static function Colaborador(){
+        return[    
+            'id' => 'collaboratorId',
+            'invitacion_id' => 'invitationId',
+            'usuario_id' => 'userId',
+            'proyecto_id' => 'proyectId'
+            
+           
+        ];
+    }
 
 }
