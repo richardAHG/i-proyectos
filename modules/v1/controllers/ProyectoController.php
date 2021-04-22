@@ -49,7 +49,7 @@ class ProyectoController extends ActiveController
         ];
 
         // Area Colaborador
-        $areaColaboradorModel = 'app\modules\v1\custom\AreaColaboradoresCustomModel';
+        $areaColaboradorModel = 'app\modules\v1\models\custom\AreaColaboradoresCustomModel';
 
         $actions['areaColaboradorCreate'] = [
             'class' => 'app\modules\v1\controllers\area\colaborador\CreateAction',
