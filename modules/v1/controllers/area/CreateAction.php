@@ -11,6 +11,8 @@ namespace app\modules\v1\controllers\area;
 use app\modules\v1\constants\Params;
 use app\modules\v1\models\query\AreaQuery;
 use app\modules\v1\utils\event\AreaEvent;
+use app\modules\v1\utils\format\Format;
+use app\modules\v1\utils\format\FormatFields;
 use enmodel\iwasi\library\rest\Action;
 use Yii;
 use yii\base\Model;
@@ -53,7 +55,9 @@ class CreateAction extends Action
             'scenario' => $this->scenario,
         ]);
 
-        $requestParams = Yii::$app->getRequest()->getBodyParams();
+        $params = Yii::$app->getRequest()->getBodyParams(); 
+        $estructura = FormatFields::Area();
+        $requestParams = Format::init($params, $estructura);
         $proyectoId = Yii::$app->getRequest()->get($this->customToken, false);
 
         if (!$proyectoId) {
@@ -69,7 +73,7 @@ class CreateAction extends Action
         if (!$model->save()) {
             throw new BadRequestHttpException('Error al registrar el area');
         }
-        (new AreaEvent($model))->creacion();
-        return $model;
+        $data = Format::init($model, $estructura, true);
+        return $data;
     }
 }

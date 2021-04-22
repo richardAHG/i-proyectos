@@ -12,10 +12,18 @@ class FormatFields
         ];
     }
 
-    public static function Colaborador(){
-        return[           
+    public static function Area(){
+        return[    
+            'id' => 'areaId',
+            'proyecto_id' => 'proyectId',
+            'nombre' => 'name',
+            'descripcion' => 'description',
+            'tipo_id' => 'typeId'
            
         ];
     }
+
+
+
 
 }
