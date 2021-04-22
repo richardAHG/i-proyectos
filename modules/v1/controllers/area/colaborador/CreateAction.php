@@ -63,13 +63,13 @@ class CreateAction extends Action
         $areaId = Yii::$app->getRequest()->get($this->areaId, false);
 
         // Validar que el usuario pertenesca al proyecto, ya que el area pertenece a un determinado proyecto
-        ProyectoQuery::validateProyectoColaborador($proyectoId, $requestParams['usuario_id']);
+        ProyectoQuery::validateProyectoColaborador($proyectoId, $requestParams['colaborador_id']);
 
         //Validar que el usuario no se registre en varias areas de un mismo proyecto
-        ProyectoQuery::valdiateAreaColaborador($proyectoId, $requestParams['usuario_id']);
+        ProyectoQuery::valdiateAreaColaborador($proyectoId, $requestParams['colaborador_id']);
 
         $requestParams['area_id'] = $areaId;
-        $requestParams['colaborador_id'] = $requestParams['usuario_id'];
+        $requestParams['colaborador_id'] = $requestParams['colaborador_id'];
         $requestParams['fecha_registro'] = Params::getDate();
         $model->load($requestParams, '');
         // print_r($model); die();

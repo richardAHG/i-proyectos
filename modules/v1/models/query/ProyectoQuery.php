@@ -70,8 +70,8 @@ class ProyectoQuery
     public static function validateProyectoColaborador($proyectoId, $colaboradorId)
     {
         $model = ProyectoColaboradoresModel::findOne([
+            'id' => $colaboradorId,
             'proyecto_id' => $proyectoId,
-            'usuario_id' => $colaboradorId,
             'estado' => true
         ]);
 
@@ -80,7 +80,7 @@ class ProyectoQuery
         }
     }
 
-    public static function valdiateAreaColaborador($proyectoId, $usuarioId)
+    public static function valdiateAreaColaborador($proyectoId, $colaboradorId)
     {
         $query = (new \yii\db\Query())
             ->select(['pa.id'])
@@ -92,7 +92,7 @@ class ProyectoQuery
             )
             ->where([
                 'pa.proyecto_id' => $proyectoId,
-                'colaborador_id' => $usuarioId
+                'colaborador_id' => $colaboradorId
             ])
             ->one();
 
