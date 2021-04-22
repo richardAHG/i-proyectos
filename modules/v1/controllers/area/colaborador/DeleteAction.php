@@ -50,7 +50,7 @@ class DeleteAction extends Action
             throw new BadRequestHttpException("Error al eliminar el usuario del area");
         }
 
-        $estructura = FormatFields::Etapa();
+        $estructura = FormatFields::AreaColaborador();
         $data = Format::init($model, $estructura, true);
         return $data;
     }
