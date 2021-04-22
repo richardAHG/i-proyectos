@@ -28,8 +28,18 @@ class FormatFields
             'id' => 'collaboratorId',
             'invitacion_id' => 'invitationId',
             'usuario_id' => 'userId',
-            'proyecto_id' => 'proyectId'
-            
+            'proyecto_id' => 'proyectId'           
+           
+        ];
+    }
+
+
+    public static function AreaColaborador(){
+        return[    
+            'id' => 'areaCollaboratorId',
+            'colaborador_id' => 'collaboratorId',
+            'area_id' => 'areaId',
+            'fecha_registro' => 'dateRegistration'           
            
         ];
     }
