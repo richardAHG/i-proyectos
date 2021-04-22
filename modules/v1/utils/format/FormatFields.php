@@ -39,8 +39,7 @@ class FormatFields
             'id' => 'areaCollaboratorId',
             'colaborador_id' => 'collaboratorId',
             'area_id' => 'areaId',
-            'fecha_registro' => 'dateRegistration'           
-           
+            'fecha_registro' => 'dateRegistration'
         ];
     }
 

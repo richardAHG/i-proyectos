@@ -12,6 +12,8 @@ use app\modules\v1\constants\Params;
 use app\modules\v1\controllers\area\colaborador\Action;
 use app\modules\v1\models\query\ProyectoQuery;
 use app\modules\v1\utils\event\AreaEvent;
+use app\modules\v1\utils\format\Format;
+use app\modules\v1\utils\format\FormatFields;
 use Yii;
 use yii\base\Model;
 use yii\web\BadRequestHttpException;
@@ -53,7 +55,10 @@ class CreateAction extends Action
             'scenario' => $this->scenario,
         ]);
 
-        $requestParams = Yii::$app->getRequest()->getBodyParams();
+        $params = Yii::$app->getRequest()->getBodyParams(); 
+        $estructura = FormatFields::AreaColaborador();
+        $requestParams = Format::init($params, $estructura);
+
         $proyectoId = Yii::$app->getRequest()->get($this->proyectoId, false);
         $areaId = Yii::$app->getRequest()->get($this->areaId, false);
 
@@ -72,7 +77,7 @@ class CreateAction extends Action
             throw new BadRequestHttpException('Error al asignar el colaborador al area');
         }
         // (new AreaEvent($model))->creacion();
-        (new AreaEvent($model))->creacionAreacolaborador($areaId, $requestParams['usuario_id']);
-        return $model;
+        $data = Format::init($model, $estructura, true);
+        return $data;
     }
 }
