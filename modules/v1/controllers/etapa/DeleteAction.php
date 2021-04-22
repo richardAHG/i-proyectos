@@ -11,6 +11,8 @@ namespace app\modules\v1\controllers\etapa;
 use app\modules\v1\constants\Params;
 use app\modules\v1\models\query\CompromisoQuery;
 use app\modules\v1\utils\event\EtapaEvent;
+use app\modules\v1\utils\format\Format;
+use app\modules\v1\utils\format\FormatFields;
 use enmodel\iwasi\library\rest\Action;
 use yii\web\BadRequestHttpException;
 use yii\web\ServerErrorHttpException;
@@ -51,8 +53,9 @@ class DeleteAction extends Action
         if (!$model->save()) {
             throw new BadRequestHttpException("Error al eliminar el proyecto");
         }
-
-        (new EtapaEvent($model))->eliminacion();
-        return $model;
+        
+        $estructura = FormatFields::Etapa();
+        $data = Format::init($model, $estructura, true);
+        return $data;
     }
 }
