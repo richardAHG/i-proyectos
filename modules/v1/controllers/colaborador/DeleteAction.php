@@ -10,6 +10,8 @@ namespace app\modules\v1\controllers\colaborador;
 
 use app\modules\v1\constants\Params;
 use app\modules\v1\utils\event\ColaboradorEvent;
+use app\modules\v1\utils\format\Format;
+use app\modules\v1\utils\format\FormatFields;
 use enmodel\iwasi\library\rest\Action;
 use yii\web\BadRequestHttpException;
 use yii\web\ServerErrorHttpException;
@@ -43,7 +45,8 @@ class DeleteAction extends Action
         if (!$model->save()) {
             throw new BadRequestHttpException("Error al eliminar el proyecto");
         }
-        (new ColaboradorEvent($model))->eliminacion();
-        return $model;
+        $estructura = FormatFields::Colaborador();
+        $data = Format::init($model, $estructura, true);
+        return $data;
     }
 }
