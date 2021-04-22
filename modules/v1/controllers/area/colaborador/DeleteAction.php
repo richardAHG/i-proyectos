@@ -10,6 +10,8 @@ namespace app\modules\v1\controllers\area\colaborador;
 
 use app\modules\v1\constants\Params;
 use app\modules\v1\utils\event\AreaEvent;
+use app\modules\v1\utils\format\Format;
+use app\modules\v1\utils\format\FormatFields;
 use Yii;
 use yii\web\BadRequestHttpException;
 use yii\web\ServerErrorHttpException;
@@ -48,7 +50,8 @@ class DeleteAction extends Action
             throw new BadRequestHttpException("Error al eliminar el usuario del area");
         }
 
-        (new AreaEvent($model))->eliminacionAreaColaborador($requestParams['area_id'], $id);
-        return $model;
+        $estructura = FormatFields::Etapa();
+        $data = Format::init($model, $estructura, true);
+        return $data;
     }
 }
