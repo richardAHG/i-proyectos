@@ -12,6 +12,8 @@ use app\modules\v1\constants\Params;
 use app\modules\v1\models\query\AreaQuery;
 use app\modules\v1\models\query\EtapaQuery;
 use app\modules\v1\utils\event\AreaEvent;
+use app\modules\v1\utils\format\Format;
+use app\modules\v1\utils\format\FormatFields;
 use enmodel\iwasi\library\rest\Action;
 use Yii;
 use yii\base\Model;
@@ -50,7 +52,9 @@ class UpdateAction extends Action
             call_user_func($this->checkAccess, $this->id, $model);
         }
 
-        $requestParams = Yii::$app->getRequest()->getBodyParams();
+        $params = Yii::$app->getRequest()->getBodyParams(); 
+        $estructura = FormatFields::Area();
+        $requestParams = Format::init($params, $estructura);
 
         $proyectoId = Yii::$app->getRequest()->get('proyecto_id', false);
 
@@ -68,8 +72,7 @@ class UpdateAction extends Action
             throw new BadRequestHttpException('Error al actualizar el proyecto');
         }
 
-        (new AreaEvent($model))->actualizacion();
-        
-        return $model;
+        $data = Format::init($model, $estructura, true);
+        return $data;
     }
 }

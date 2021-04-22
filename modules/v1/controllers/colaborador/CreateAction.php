@@ -19,6 +19,8 @@ use app\modules\v1\models\query\ProyectoQuery;
 use app\modules\v1\models\query\UsuarioQuery;
 use app\modules\v1\models\UsuariosModel;
 use app\modules\v1\utils\event\ColaboradorEvent;
+use app\modules\v1\utils\format\Format;
+use app\modules\v1\utils\format\FormatFields;
 use DateInterval;
 use DateTime;
 use enmodel\iwasi\library\rest\Action;
@@ -64,7 +66,9 @@ class CreateAction extends Action
             'scenario' => $this->scenario,
         ]);
 
-        $requestParams = Yii::$app->getRequest()->getBodyParams();
+        $params = Yii::$app->getRequest()->getBodyParams(); 
+        $estructura = FormatFields::Colaborador();
+        $requestParams = Format::init($params, $estructura);
         $proyectoId = Yii::$app->getRequest()->get($this->customToken, false);
         $usuario_id = Yii::$app->getRequest()->get('usuario_id', false);
 
@@ -121,8 +125,8 @@ class CreateAction extends Action
         } catch (Exception $ex) {
             throw $ex;
         }
-        (new ColaboradorEvent($model))->creacion();
-        return $model;
+        $data = Format::init($model, $estructura, true);
+        return $data;
     }
 
     public static function envioCorreo($usuario_receptor, $subject, $usuario_emisor, $token, $proyectoId, $id)
