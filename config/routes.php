@@ -41,12 +41,13 @@ return [
         ],
         'prefix' => '/v1/<usuario_id:\\d>'
     ],
-    // [
-    //     'class' => 'yii\rest\UrlRule',
-    //     'pluralize' => false,
-    //     'controller' => [
-    //         'etapa' => 'v1/etapa'
-    //     ],
-    //     'prefix' => '/v1/<proyecto_id:\\d>'
-    // ],
+    [
+        'class' => 'yii\rest\UrlRule',
+        'pluralize' => false,
+        'except'=>['create','update','delete'],
+        'controller' => [
+            'parametro' => 'v1/parametro'
+        ],
+        'prefix' => '/v1/<proyecto_id:\\d>'
+    ],
 ];
