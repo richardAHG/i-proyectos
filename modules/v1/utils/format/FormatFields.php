@@ -4,36 +4,42 @@ namespace app\modules\v1\utils\format;
 
 class FormatFields
 {
+    public static function Proyecto(){
+        return[    
+            'id' => 'proyectId',            
+            'nombre' => 'name',
+            'usuario_id' => 'userId',
+            'color'=>'colour',
+            'logo' => 'logo',
+            'descripcion' => 'description'
+        ];
+    }
     public static function Etapa(){
         return[           
             'id' => 'stageId',
-            'proyecto_id' => 'proyectId',
-            'nombre' => 'name'
+            'nombre' => 'name',
+            'proyecto_id' => 'proyectId'
+            
         ];
     }
-
     public static function Area(){
         return[    
             'id' => 'areaId',
-            'proyecto_id' => 'proyectId',
-            'nombre' => 'name',
+            'nombre' => 'name',                    
             'descripcion' => 'description',
-            'tipo_id' => 'typeId'
+            'tipo_id' => 'typeId',
+            'proyecto_id' => 'proyectId'
            
         ];
     }
-
     public static function Colaborador(){
         return[    
             'id' => 'collaboratorId',
-            'invitacion_id' => 'invitationId',
+            'proyecto_id' => 'proyectId',            
             'usuario_id' => 'userId',
-            'proyecto_id' => 'proyectId'           
-           
+            'invitacion_id' => 'invitationId' 
         ];
     }
-
-
     public static function AreaColaborador(){
         return[    
             'id' => 'areaCollaboratorId',
@@ -42,22 +48,10 @@ class FormatFields
             'fecha_registro' => 'startDate'
         ];
     }
-
-    public static function Proyecto(){
-        return[    
-            'id' => 'proyectId',
-            'usuario_id' => 'userId',
-            'nombre' => 'name',
-            'color'=>'colour',
-            'logo' => 'logo',
-            'descripcion' => 'description'
-        ];
-    }
-
     public static function Administrador(){
-        return[    
-            'colaborador_id' => 'collaboratorId',
-            'id' => 'administratorId'  
+        return[
+            'id' => 'administratorId',
+            'colaborador_id' => 'collaboratorId'            
         ];
     }
 }
