@@ -53,7 +53,10 @@ class CreateAction extends Action
             'scenario' => $this->scenario,
         ]);
 
-        $requestParams = Yii::$app->getRequest()->getBodyParams(); 
+        $params = Yii::$app->getRequest()->getBodyParams(); 
+        $estructura = FormatFields::Administrador();
+        $requestParams = Format::init($params, $estructura);
+
 
         //validación de compromiso_id duplicados
         //EtapaQuery::validateDuplicate($requestParams['nombre'],$proyectoId);
@@ -63,6 +66,10 @@ class CreateAction extends Action
             throw new BadRequestHttpException('Error al registrar al administrador');
         }
 
-        return $model;
+        $estructura = FormatFields::Administrador();
+        $data = Format::init($model, $estructura, true);
+        return $data;
+
+
     }
 }

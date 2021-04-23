@@ -53,4 +53,12 @@ class FormatFields
             'descripcion' => 'description'
         ];
     }
+
+    public static function Administrador(){
+        return[    
+            'colaborador_id' => 'collaboratorId',
+            'id' => 'administratorId'         
+           
+        ];
+    }
 }
