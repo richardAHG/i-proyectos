@@ -124,7 +124,7 @@ class ProyectoController extends ActiveController
         ];
 
         // administrador
-        $administradorModel = 'app\modules\v1\models\ProyectoAdministradoresModel';
+        $administradorModel = 'app\modules\v1\models\custom\ProyectoAdministradoresCustomModel';
         $actions['administradorCreate'] = [
             'class' => 'app\modules\v1\controllers\administrador\CreateAction',
             'modelClass' => $administradorModel
