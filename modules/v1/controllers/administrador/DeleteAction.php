@@ -11,6 +11,8 @@ namespace app\modules\v1\controllers\administrador;
 use app\modules\v1\constants\Params;
 use app\modules\v1\models\query\CompromisoQuery;
 use app\modules\v1\utils\event\EtapaEvent;
+use app\modules\v1\utils\format\Format;
+use app\modules\v1\utils\format\FormatFields;
 use yii\web\BadRequestHttpException;
 use yii\web\ServerErrorHttpException;
 
@@ -43,7 +45,9 @@ class DeleteAction extends Action
             throw new BadRequestHttpException("Error al eliminar al administrador");
         }
 
-        (new EtapaEvent($model))->eliminacion();
-        return $model;
+        $estructura = FormatFields::Administrador();
+        $data = Format::init($model, $estructura, true);
+        return $data;
+
     }
 }

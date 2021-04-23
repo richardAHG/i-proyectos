@@ -57,8 +57,7 @@ class FormatFields
     public static function Administrador(){
         return[    
             'colaborador_id' => 'collaboratorId',
-            'id' => 'administratorId'         
-           
+            'id' => 'administratorId'  
         ];
     }
 }
